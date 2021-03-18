@@ -1,4 +1,13 @@
 # PLEASE ADD YOUR API_KEY IN local.settings.json
 ```
-"ApiKey":"{{YELP_KEY_HERE!}}",
+{
+  "IsEncrypted": false,
+  "Values": {
+    "AzureWebJobsStorage": "",
+    "FUNCTIONS_WORKER_RUNTIME": "dotnet"
+  },
+  "ConnectionStrings": {
+    "ApiKey":"{{ADD_API_KEY_HERE}}"
+  }
+}
 ```

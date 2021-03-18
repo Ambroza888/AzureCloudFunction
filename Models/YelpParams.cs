@@ -2,7 +2,7 @@ using System.Collections.Generic;
 
 namespace Valence.Models
 {
-    // Root myDeserializedClass = JsonConvert.DeserializeObject<Root>(myJsonResponse);
+
     public class Category
     {
         public string alias { get; set; }

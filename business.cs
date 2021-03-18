@@ -9,6 +9,7 @@ using Newtonsoft.Json;
 using Valence.Models;
 using System.Net.Http;
 using Valence.Helper;
+using Valence.Validation;
 
 namespace Valence
 {
@@ -19,17 +20,11 @@ namespace Valence
             [HttpTrigger(AuthorizationLevel.Anonymous, "get", Route = null)] HttpRequest req,
             ILogger log)
         {
-            var QueryParam = new LocationParams();
-            QueryParam.Location = req.Query["location"];
-            QueryParam.Categories = req.Query["categories"];
+            var QueryParam = ValidateQueryRequest.Validate(req.Query);
 
-            if (QueryParam.Location == null || QueryParam.Categories == null)
+            if (QueryParam == null)
             {
-                // the good way of handling that response is,
-                // depends on how the client want the date to be shape like.
-                return new OkObjectResult((QueryParam.Location != null)
-                    ? $"Location is valid, Please specify categories"
-                    : $"Categories are valid, Please specify Location in the query string");
+                return new OkObjectResult("Please specify a location or a latitude and longitude");
             }
             else
             {
@@ -39,9 +34,10 @@ namespace Valence
 
                     YelpParams response = JsonConvert.DeserializeObject<YelpParams>(YelpResponse);
 
-                    var data = GenerateList.Generate(response);
+                    var BusinessesToReturn = GenerateList.Generate(response);
 
-                    return new OkObjectResult(data);
+                    return new OkObjectResult(BusinessesToReturn);
+
                 }
                 catch(HttpRequestException e)
                 {
